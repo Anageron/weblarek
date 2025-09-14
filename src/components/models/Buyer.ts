@@ -30,26 +30,32 @@ export class Buyer {
   }
 
   validate(): { isValid: boolean; errors: string[] } {
-    const errors = [];
+    const errors = {
+      payment: "",
+      email: "",
+      phone: "",
+      address: "",
+    };
 
     if (!this.payment) {
-      errors.push(`Тип оплаты не выбран`);
+      errors.payment = `Тип оплаты не выбран`;
     }
 
-    if (!this.email || this.email === "") {
-      errors.push(`Email не заполнен`);
+    if (!this.email) {
+      errors.email = `Email не заполнен`;
     }
 
-    if (!this.phone || this.phone === "") {
-      errors.push(`Телефон не заполнен`);
+    if (!this.phone) {
+      errors.phone =`Телефон не заполнен`;
     }
 
-    if (!this.address || this.address === "") {
-      errors.push(`Адрес не заполнен`);
+    if (!this.address) {
+      errors.address =`Адрес не заполнен`;
     }
+    const isValid = Object.values(errors).every(error => error === "");
 
     return {
-      isValid: errors.length === 0,
+      isValid,
       errors,
     };
   }
