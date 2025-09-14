@@ -32,8 +32,7 @@ export class Buyer {
   validate(): { isValid: boolean; errors: Partial<IBuyer> } {
     const errors: Partial<IBuyer> = {};
 
-   
-    if (!this.email) {
+   if (!this.email) {
       errors.email = `Email не заполнен`;
     }
 
