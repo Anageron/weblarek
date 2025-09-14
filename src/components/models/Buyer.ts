@@ -29,18 +29,10 @@ export class Buyer {
     this.address = "";
   }
 
-  validate(): { isValid: boolean; errors: string[] } {
-    const errors = {
-      payment: "",
-      email: "",
-      phone: "",
-      address: "",
-    };
+  validate(): { isValid: boolean; errors: Partial<IBuyer> } {
+    const errors: Partial<IBuyer> = {};
 
-    if (!this.payment) {
-      errors.payment = `Тип оплаты не выбран`;
-    }
-
+   
     if (!this.email) {
       errors.email = `Email не заполнен`;
     }
@@ -52,10 +44,10 @@ export class Buyer {
     if (!this.address) {
       errors.address =`Адрес не заполнен`;
     }
-    const isValid = Object.values(errors).every(error => error === "");
+    
 
     return {
-      isValid,
+      isValid: Object.keys(errors).length === 0,
       errors,
     };
   }
