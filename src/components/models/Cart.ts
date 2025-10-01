@@ -1,14 +1,18 @@
 import { IProduct } from "../../types";
+import { IEvents } from "../base/Events.ts";
 
 export class Cart {
   private items: IProduct[] = [];
 
+  constructor(protected e: IEvents) {}
+
   getProduct(): IProduct[] {
-    return [...this.items];
+    return this.items;
   }
 
   addItem(product: IProduct): void {
-    this.items.push({ ...product });
+    this.items.push(product);
+    this.e.emit("cart:change");
   }
 
   removeProduct(product: IProduct): void {
@@ -16,6 +20,7 @@ export class Cart {
     if (index !== -1) {
       this.items.splice(index, 1);
     }
+    this.e.emit("cart:change");
   }
 
   clear(): void {

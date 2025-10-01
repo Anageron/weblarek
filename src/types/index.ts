@@ -4,6 +4,7 @@ export interface IApi {
     get<T extends object>(uri: string): Promise<T>;
     post<T extends object>(uri: string, data: object, method?: ApiPostMethods): Promise<T>;
 }
+
 export interface IProduct {
   id: string;             
   description: string;    
@@ -12,6 +13,7 @@ export interface IProduct {
   category: string;       
   price: number | null;   
 } 
+
 export interface IBuyer {
   payment: TPayment;  
   email: string;      
@@ -19,8 +21,14 @@ export interface IBuyer {
   address: string;    
 } 
 
-export type TPayment = 'online' | 'cash';
+export type TPayment = 'online' | 'cash' | "";
 
+export interface IErrors {
+  payment: string;  
+  email: string;      
+  phone: string;      
+  address: string;    
+} 
 
 export interface IProductsResponse {
   total: number;           
@@ -36,3 +44,4 @@ export interface IOrderResponse {
   id: string;
   total: number;
 }
+

@@ -1,49 +1,64 @@
-import { IBuyer, TPayment } from "../../types";
+import { IBuyer, IErrors } from "../../types";
 
 export class Buyer {
-  private payment: TPayment = "online";
-  private email: string = "";
-  private phone: string = "";
-  private address: string = "";
+  private data: IBuyer = {
+    payment: "",
+    email: "",
+    phone: "",
+    address: "",
+  };
 
   saveData(data: Partial<IBuyer>): void {
-    if (data.payment !== undefined) this.payment = data.payment;
-    if (data.email !== undefined) this.email = data.email;
-    if (data.phone !== undefined) this.phone = data.phone;
-    if (data.address !== undefined) this.address = data.address;
+    Object.assign(this.data, data);
   }
 
   getData(): IBuyer {
+    const { payment, email, phone, address } = this.data;
+
     return {
-      payment: this.payment,
-      email: this.email,
-      phone: this.phone,
-      address: this.address,
+      payment,
+      email,
+      phone,
+      address,
     };
   }
 
   clear(): void {
-    this.payment = "online";
-    this.email = "";
-    this.phone = "";
-    this.address = "";
+    this.data.payment = "";
+    this.data.email = "";
+    this.data.phone = "";
+    this.data.address = "";
   }
 
-  validate(): { isValid: boolean; errors: Partial<IBuyer> } {
-    const errors: Partial<IBuyer> = {};
+  validateOrder(): { isValid: boolean; errors: Partial<IErrors> } {
+    const errors: Partial<IErrors> = {};
+    const { payment, address } = this.data;
 
-   if (!this.email) {
+    if (!payment) {
+      errors.payment = `Способ оплаты не выбран`;
+    }
+
+    if (!address) {
+      errors.address = `Адрес не заполнен`;
+    }
+
+    return {
+      isValid: Object.keys(errors).length === 0,
+      errors,
+    };
+  }
+
+  validateContacts(): { isValid: boolean; errors: Partial<IErrors> } {
+    const errors: Partial<IErrors> = {};
+    const { email, phone } = this.data;
+
+    if (!email) {
       errors.email = `Email не заполнен`;
     }
 
-    if (!this.phone) {
-      errors.phone =`Телефон не заполнен`;
+    if (!phone) {
+      errors.phone = `Телефон не заполнен`;
     }
-
-    if (!this.address) {
-      errors.address =`Адрес не заполнен`;
-    }
-    
 
     return {
       isValid: Object.keys(errors).length === 0,
