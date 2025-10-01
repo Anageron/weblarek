@@ -265,7 +265,7 @@ export interface IOrderResponse {
 `FormModal` - общий абстрактный класс для CheckoutForm и ContactForm, в котором содержится общая логика.  
 `CheckoutForm` - форма с адресом и способом оплаты.  
 `ContactForm` - форма с телефоном и почтой  
-`OrderSuccess` - экран "Заказ оформлен".
+`Success` - экран "Заказ оформлен".
 
 ## Cлой Презентера 
 
