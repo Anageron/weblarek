@@ -15,7 +15,7 @@ import { cloneTemplate, ensureElement } from "./utils/utils.ts";
 import { Catalog } from "./components/models/Catalog";
 import { Cart } from "./components/models/Cart";
 import { Buyer } from "./components/models/Buyer";
-import { IOrder } from "./types";
+import { IOrder, IBuyer } from "./types";
 import { apiClient } from "./components/models/ApiClient";
 import { API_URL } from "./utils/constants";
 
@@ -29,7 +29,7 @@ const api = new apiClient(API_URL);
 api
   .getProduct()
   .then((products) => catalog.setProducts(products.items))
-  .catch((error) => console.error("Ошибка при загрузке каталога:", error));
+  .catch((error) => console.error("Ошибка при загрузке каталога:"));
 
 const headerContainer = ensureElement<HTMLElement>(".header");
 const galleryContainer = ensureElement<HTMLElement>(".gallery");
@@ -49,6 +49,7 @@ const cartView = new CartView(
   e,
   cloneTemplate<HTMLTemplateElement>(cartViewTemplate)
 );
+const gallery = new Gallery(galleryContainer);
 const order = new CheckoutForm(e, cloneTemplate(checkoutFormTemplate));
 const contacts = new ContactForm(e, cloneTemplate(contactFormTemplate));
 
@@ -57,7 +58,6 @@ e.on("modal:close", () => {
 });
 
 e.on("products: change", () => {
-  const gallery = new Gallery(galleryContainer);
   const itemCards = catalog.getProduct().map((item) => {
     const card = new CatalogCard(e, cloneTemplate(catalogCardTemplate));
     return card.render(item);
@@ -107,14 +107,14 @@ e.on("contacts:open", () => {
   modal.open(contacts.render());
 });
 
-e.on("check:change", (props: object) => {
+e.on("check:change", (props: Partial<IBuyer>) => {
   buyer.saveData(props);
   const valid = buyer.validateOrder();
   order.valid = valid.isValid;
   order.error = Object.values(valid.errors)[0];
 });
 
-e.on("contacts:change", (props: object) => {
+e.on("contacts:change", (props: Partial<IBuyer>) => {
   buyer.saveData(props);
   const valid = buyer.validateContacts();
   contacts.valid = valid.isValid;
